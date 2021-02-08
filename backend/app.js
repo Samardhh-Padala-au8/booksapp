@@ -28,6 +28,8 @@ app.use(
   })
 );
 
+
+
 app.get('/', (req, res)=>{
   res.sendFile(path.join(__dirname, '../backend/public/build/index.html'));
 })
@@ -42,12 +44,12 @@ app.use('/post',postRouter)
 app.use('/like', likeRouter )
 app.use('/comment', commentRouter)
 
-app.use(function (req, res) {
-    // our custom JSON 404 middleware. Since it's placed last
-    // it will be the last middleware called, if all others
-    // invoke next() and do not respond.
-    res.status(404).json({ success: false, message: "This API endpoint does not exist!" });
-  });
+app.use(function(req, res) {
+	res.sendFile(path.join(__dirname, '../backend/public/build/index.html'));
+});
+
+
+
 
   app.use(function (err, req, res, next) {
     // middleware with an arity of 4 are considered
@@ -63,6 +65,8 @@ app.use(function (req, res) {
       res.status(err.status || 500).json({ success: false, message: "Internal Server Error! Try later." });
     }
   });
+
+
 
 
 
