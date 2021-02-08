@@ -5,7 +5,7 @@ export const addComment = (comment) => async (dispatch) => {
 
     try {
       dispatch({type:TOGGLE_COMMENT_FETCHING_STATE})
-      const {data} =await axios({ method: 'post', url:`http://localhost:4000/comment`,data:comment, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
+      const {data} =await axios({ method: 'post', url:`${process.env.REACT_APP_BASE_URL}/comment`,data:comment, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
      console.log(data)
       if(data.success){
       dispatch({
@@ -13,7 +13,6 @@ export const addComment = (comment) => async (dispatch) => {
         payload:data.comment
       })
      }
-     
      else{
        alert(data.message)
      }
@@ -33,7 +32,7 @@ export const addComment = (comment) => async (dispatch) => {
       console.log(postId)
       dispatch({type:SET_COMMENTS,payload:null})
       dispatch({type:TOGGLE_COMMENT_FETCHING_STATE})
-      const {data} =await axios({ method: 'get', url:`http://localhost:4000/comment/${postId.postId}`, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
+      const {data} =await axios({ method: 'get', url:`${process.env.REACT_APP_BASE_URL}/comment/${postId.postId}`, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
      console.log(data)
       if(data.success){
       dispatch({

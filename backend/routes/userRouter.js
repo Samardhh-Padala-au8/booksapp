@@ -16,6 +16,8 @@ router.get('/all',auth, userController.getallusers)
 router.get('/:id',auth, userController.getuserprofile)
 router.put('/deactivate', auth, checkrole(2), userValidations.deactivateuser, userController.deactivateuser)
 router.put('/activate', auth, checkrole(2), userValidations.activateuser, userController.activateuser)
+router.post('/resetpassword', userValidations.sendresetlink, userController.sendresetlink)
+router.put('/updatepassword', userValidations.updatepassword, userController.updatepassword)
 
 
 

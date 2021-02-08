@@ -23,6 +23,7 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.12",
+    "nodemailer": "^6.4.17",
     "pusher": "^4.0.2",
     "uuid": "^8.3.2"
   },

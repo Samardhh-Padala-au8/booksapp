@@ -2,6 +2,8 @@ const { validationResult } = require("express-validator");
 const User = require("../models/userModel");
 const utils = require('../uttils/roleconversion')
 const cloudinary = require('../uttils/cloudinary')
+const transporter = require('../uttils/nodemailer')
+const jwt = require('jsonwebtoken')
 
 const userController = {};
 
@@ -261,4 +263,67 @@ userController.uploadpicture = async function (req, res, next) {
   }
 };
 
+/**
+ *@desc     Send password reset link
+ *@route    POST /user/resetpassword
+ *@access   Public
+ **/
+userController.sendresetlink = async function (req, res, next) {
+  if (!validationResult(req).isEmpty()) {
+    //Check if there is any validation error.
+    return res
+      .status(200)
+      .json({ success: false, message: "VALIDATION_ERROR", error: { status: 400, errors: validationResult(req).mapped() } });
+  }
+  try {
+    const email = req.body.email
+    const user =await User.findOne({email}) 
+    if (user){
+      const token = await user.generateAuthToken()
+      const mailOptions={
+        to: req.body.email,
+        subject: "Reset password for BooksApp",
+        html: `<h3>You are recieving this mail because you have requested for password reset for your BooksApp account. Click the below link to change your password.</h3><br><p><a href=${process.env.FRONT_END_BASE_URL}/resetpassword/${token}>Click here to reset your password</a></p>`
+     };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          next(error)
+      }
+      return res.status(200).json({success:true, message:"Please check your mail for reset link!"})
+  });
+    }
+    else{
+      return res.status(200).json({success:false, message:"CONFLICT_ERR", error:{status:409, message:"User does't exist, please register!"}})
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ *@desc     Verify token and reset password
+ *@route    PUT /user/updatepassword
+ *@access   Private
+ **/
+userController.updatepassword = async function (req, res, next) {
+  if (!validationResult(req).isEmpty()) {
+    //Check if there is any validation error.
+    return res
+      .status(200)
+      .json({ success: false, message: "VALIDATION_ERROR", error: { status: 400, errors: validationResult(req).mapped() } });
+  }
+  try {
+    console.log('back')
+      const token = req.body.token
+      const decoded = jwt.verify(token, process.env.JWT_KEY)
+      const userId = decoded._id
+      const user =await User.findOne({_id:userId})
+      user.password = req.body.password
+      await user.save()
+      return res.status(200).json({success:true, message:'Password updated successfully, login now!'})
+   
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = userController

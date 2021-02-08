@@ -16,13 +16,6 @@ app.use(cors())
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true }))
 app.use(express.static('public/build'));
-// app.use(function(req, res) {
-// 	res.sendFile(path.join(__dirname, '../backend/public/build/index.html'));
-// });
-app.get('/', (req, res)=>{
-  res.sendFile(path.join(__dirname, '../backend/public/build/index.html'));
-})
-
 app.use(hpp())
 app.use(
   helmet({
@@ -35,7 +28,12 @@ app.use(
   })
 );
 
-
+app.get('/', (req, res)=>{
+  res.sendFile(path.join(__dirname, '../backend/public/build/index.html'));
+})
+// app.get('/', (req, res)=>{
+//     res.status(200).send("Health check")
+// })
 
 
 app.use('/user', userRouter)
@@ -43,12 +41,6 @@ app.use('/library', libraryRouter)
 app.use('/post',postRouter)
 app.use('/like', likeRouter )
 app.use('/comment', commentRouter)
-
-// app.get("/", (req, res) => {
-//   res.sendFile(
-//     path.join(__dirname, '../backend/public/build/index.html')
-//   );
-// });
 
 app.use(function (req, res) {
     // our custom JSON 404 middleware. Since it's placed last

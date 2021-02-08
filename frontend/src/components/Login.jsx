@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Col, Alert, Row, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../styles/login.css";
-import { loginUser } from "../redux/actions/userActions";
+import { loginUser, logoutUser } from "../redux/actions/userActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 class Login extends Component {
@@ -21,8 +21,8 @@ class Login extends Component {
       password: this.state.password,
     };
     const { isChecked } = this.state;
-    localStorage.setItem('rememberMe', isChecked);
-    localStorage.setItem('ruser', isChecked ? JSON.stringify(user) : '');
+    localStorage.setItem("rememberMe", isChecked);
+    localStorage.setItem("ruser", isChecked ? JSON.stringify(user) : "");
     this.props.loginUser(user, this.props.history);
   };
   toggleChange = () => {
@@ -31,13 +31,17 @@ class Login extends Component {
     });
   };
   componentDidMount() {
-    const rememberMe = localStorage.getItem('rememberMe') === 'true';
-    const user = rememberMe ? localStorage.getItem('ruser') : '';
+    this.props.logoutUser();
+    const rememberMe = localStorage.getItem("rememberMe") === "true";
+    const user = rememberMe ? localStorage.getItem("ruser") : "";
     if (user) {
-      let userobj = JSON.parse(user)
-      this.setState({ email: userobj.email, isChecked: rememberMe, password: userobj.password });
+      let userobj = JSON.parse(user);
+      this.setState({
+        email: userobj.email,
+        isChecked: rememberMe,
+        password: userobj.password,
+      });
     }
-
   }
   render() {
     return (
@@ -148,6 +152,9 @@ class Login extends Component {
                   </Alert>
                 ) : null
               ) : null}
+              {this.props.response ? (
+                <Alert color="secondary">{this.props.response.message}</Alert>
+              ) : null}
             </Container>
           </form>
         </div>
@@ -163,4 +170,6 @@ const mapStatetoprops = (storeData) => {
   };
 };
 
-export default connect(mapStatetoprops, { loginUser })(withRouter(Login));
+export default connect(mapStatetoprops, { loginUser, logoutUser })(
+  withRouter(Login)
+);

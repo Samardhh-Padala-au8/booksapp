@@ -12,13 +12,20 @@ const Modal = ({ modalState, toggleModalstate }) => {
   };
   return (
     <Reactmodal
+      onRequestClose={toggleModalstate}
       style={{
         overlay: { backgroundColor: "rgb(21, 32, 43,0.8)" },
         content: {
-          top: "20%",
-          left: "20%",
-          right: "20%",
-          bottom: "20%",
+          position: "absolute",
+          top: "100px",
+          left: "60px",
+          right: "60px",
+          bottom: "100px",
+          border: "1px solid #ccc",
+          overflow: "auto",
+          WebkitOverflowScrolling: "touch",
+          borderRadius: "4px",
+          padding: "20px",
         },
       }}
       isOpen={modalState}

@@ -26,7 +26,7 @@ class Library extends Component {
     readboolean: false,
   };
   componentDidMount() {
-    this.props.fetchlibrary();
+    this.props.fetchlibrary(this.props.history);
   }
   handleBooks = (e) => {
     this.setState({ books: e.target.value });
@@ -107,6 +107,7 @@ class Library extends Component {
     this.props.deletewillread(id);
   };
 
+  
   render() {
     console.log(this.props.readbooks);
     return this.props.user ? (

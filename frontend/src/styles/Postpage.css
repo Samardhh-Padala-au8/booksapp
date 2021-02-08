@@ -1,7 +1,6 @@
 .posts-section {
-  background-color: white;
   border: 1px solid rgb(153, 151, 151);
   border-top: none;
   border-bottom: none;
-  background-color: #15202b;
+  padding: 20px;
 }

@@ -7,6 +7,7 @@ import {
   activateuser,
 } from "../redux/actions/userActions";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 class Social extends Component {
   handleProfile = (id) => {
@@ -22,10 +23,10 @@ class Social extends Component {
     this.props.activateuser(id, window);
   };
   componentDidMount() {
-    this.props.getAllusers();
+    this.props.getAllusers(this.props.history);
   }
   render() {
-    return (
+    return this.props.user ? (
       <div className="socialbody">
         <div className="containeri">
           {this.props.users ? (
@@ -35,14 +36,26 @@ class Social extends Component {
               >
                 <div className="cardi">
                   <div className="contenti">
-                    <img src={data.imagelink} alt="" width="100" height="100" className="socialimage"/>
+                    <img
+                      src={data.imagelink}
+                      alt=""
+                      width="100"
+                      height="100"
+                      className="socialimage"
+                    />
                     <h3>{data.name}</h3>
                     <p>{data.email}</p>
                     <div className="userdetailbuttons">
-                      <button onClick={() => this.handleProfile(data._id)} className="sociobutton">
+                      <button
+                        onClick={() => this.handleProfile(data._id)}
+                        className="sociobutton"
+                      >
                         Profile
                       </button>
-                      <button onClick={() => this.handleLibrary(data._id)} className="sociobutton">
+                      <button
+                        onClick={() => this.handleLibrary(data._id)}
+                        className="sociobutton"
+                      >
                         Library
                       </button>
                       {this.props.user.role.includes(2) ? (
@@ -68,6 +81,8 @@ class Social extends Component {
           )}
         </div>
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }

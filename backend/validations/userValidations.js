@@ -71,4 +71,13 @@ userValidation.register = [
     body("userId").not().isEmpty().withMessage("userId is required!").isString().withMessage("userId must contain string only!"),
   ];
 
+  userValidation.sendresetlink = [
+    body("email").not().isEmpty().withMessage("email is required!").isString().withMessage("email must contain string only!"),
+  ];
+
+  userValidation.updatepassword = [
+    body("token").not().isEmpty().withMessage("token is required!").isString().withMessage("token must contain string only!"),
+    body("password").not().isEmpty().withMessage("password is required!").isString().withMessage("password must contain string only!")
+  ];
+
   module.exports = userValidation

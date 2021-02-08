@@ -3,6 +3,7 @@ import "../styles/Searchsuggestion.css";
 import axios from "axios";
 import { setBookinfo } from "../redux/actions/Postactions";
 import { connect } from "react-redux";
+import utills from "../utils";
 class Searchsuggestion extends React.Component {
   constructor(props) {
     super(props);
@@ -54,7 +55,7 @@ class Searchsuggestion extends React.Component {
               style={{ cursor: "pointer" }}
               onClick={() => this.suggestionSelected(item)}
             >
-              {item.title}
+              {utills.limitDescription(item.title, 35)}
             </li>
           ))}
         </ul>
@@ -65,21 +66,16 @@ class Searchsuggestion extends React.Component {
   render() {
     const { text } = this.state;
     return (
-      <div className="container">
-        <div className="row justify-content-md-center">
-          <div className="col-md-12 input">
-            <input
-              className="search_input"
-              value={text}
-              onChange={this.onTextChanged}
-              type="text"
-              placeholder="Search"
-            />
-          </div>
-          <div className="col-md-12 justify-content-md-center">
-            {this.renderSuggestions()}
-          </div>
-        </div>
+      <div className="modalinputdiv">
+        <input
+          className="search_input"
+          value={text}
+          onChange={this.onTextChanged}
+          type="text"
+          placeholder="Search"
+        />
+
+        {this.renderSuggestions()}
       </div>
     );
   }

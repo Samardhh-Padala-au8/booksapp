@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Utils from "../utils";
-import { logoutUser } from "../redux/actions/userActions";
+import { logoutUser, logoutAll } from "../redux/actions/userActions";
 
 const Header = (props) => {
   const handleHome = () => {
@@ -16,6 +16,9 @@ const Header = (props) => {
   };
   const handlelogout = () => {
     props.logoutUser();
+  };
+  const handlelogoutall = () => {
+    props.logoutAll();
   };
   return (
     <div className="Header-Total">
@@ -86,9 +89,14 @@ const Header = (props) => {
                         Social
                       </Link>
                     </Dropdown.Item>
-                    <Dropdown.Item>
+                    <Dropdown.Item onClick={handlelogout}>
                       <Link to="/" className="form-links1">
-                        <span onClick={handlelogout}>Logout</span>
+                        <span style={{ color: "#FF0000" }}>Logout</span>
+                      </Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={handlelogoutall}>
+                      <Link to="/" className="form-links1">
+                        <span style={{ color: "	#8B0000" }}>Logout all</span>
                       </Link>
                     </Dropdown.Item>
                   </Dropdown.Menu>
@@ -107,4 +115,6 @@ const mapStatetoprops = (storeData) => {
     user: storeData.userState.user,
   };
 };
-export default connect(mapStatetoprops, { logoutUser })(withRouter(Header));
+export default connect(mapStatetoprops, { logoutUser, logoutAll })(
+  withRouter(Header)
+);

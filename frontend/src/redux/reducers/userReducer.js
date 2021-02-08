@@ -13,11 +13,13 @@ import {
     TOGGLE_IS_UPDATE_RES_FETCHING,
     SET_IMAGE_LINK,
     SET_ALL_USERS,
-    SET_USER_PROFILE
+    SET_USER_PROFILE,
+    SET_RESET_PASS_RES,
+    SET_UPDATE_PASS_RES
   } from "../actionTypes";
   
   const initialState = {
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: JSON.parse(sessionStorage.getItem("user")) || null,
     allusers:null,
     userDetail:null,
     userProfile:null,
@@ -28,7 +30,9 @@ import {
     isUpdateresponsefetching:false,
     dpresponse:null,
     updateResponse:null,
-    socketId:null
+    socketId:null,
+    resetPasswordres:null,
+    updatePasswordres:null
   };
   
   const userReducer = (state = initialState, action) => {
@@ -36,7 +40,7 @@ import {
     switch (type) {
       case SET_USER:
         const userJSON = JSON.stringify(payload);
-        localStorage.setItem("user", userJSON);
+        sessionStorage.setItem("user", userJSON);
         return { ...state, user: payload };
         case SET_IMAGE_LINK:
           return { ...state, user: {...state.user,imagelink:payload} };
@@ -46,6 +50,10 @@ import {
         return {...state,socketId:payload}
       case SET_ALL_USERS:
         return {...state, allusers:payload}
+      case SET_UPDATE_PASS_RES:
+        return {...state, updatePasswordres:payload}
+      case SET_RESET_PASS_RES:
+        return{...state, resetPasswordres:payload}
       case SET_USER_PROFILE:
         return {...state, userProfile:payload}
       case SET_TOKEN:
@@ -54,8 +62,9 @@ import {
       case TOGGLE_ISUSERFETCHING_STATE:
         return { ...state, isuserFetching: !state.isuserFetching };
       case LOGOUT_USER:
-        localStorage.removeItem("user");
-        return { ...state, user: null, userDetail:null };
+        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("auth_token")
+        return { ...state, user: null, userDetail:null, userResponse:null };
         case TOGGLE_IS_RES_FETCHING:
         return{...state, isResponseFetching:!state.isResponseFetching}
       case SET_USER_RESPONSE:

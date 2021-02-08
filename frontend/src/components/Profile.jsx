@@ -25,10 +25,12 @@ class Profile extends Component {
     profileImg: "https://i.ibb.co/gSbgf9K/male-placeholder.jpg",
   };
   async componentDidMount() {
-    await this.props.getuserDetail();
-    const { name, email, gender, bio, imagelink } = this.props.userDetail;
+    await this.props.getuserDetail(this.props.history);
+    if (this.props.userDetail) {
+      const { name, email, gender, bio, imagelink } = this.props.userDetail;
 
-    this.setState({ name, email, gender, bio, profileImg: imagelink });
+      this.setState({ name, email, gender, bio, profileImg: imagelink });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -53,7 +55,13 @@ class Profile extends Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({ edit: false });
+    this.setState({
+      edit: false,
+      nameedit: true,
+      emailedit: true,
+      ageedit: true,
+      bioedit: true,
+    });
     const picture = {
       imageData: this.state.profileImg,
     };

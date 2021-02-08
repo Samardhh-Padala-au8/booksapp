@@ -1,16 +1,22 @@
 import {SET_POSTS,SET_BOOK_INFO,ADD_POST, TOGGLE_MODAL_STATE, TOGGLE_POST_FETCHING_STATE, SET_ISLIKED, INCREASE_LIKE, INCREASE_COMMENT, DECREASE_LIKE} from '../actionTypes'
 import axios from 'axios'
-export const getallPosts = () => async (dispatch) => {
+export const getallPosts = (history) => async (dispatch) => {
 
     try {
       dispatch({type:TOGGLE_POST_FETCHING_STATE})
       dispatch({type:SET_POSTS, payload:null})
       const {data} = await axios.get(
-        `http://localhost:4000/post`,{
+        `${process.env.REACT_APP_BASE_URL}/post`,{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
-      dispatch({type:SET_POSTS, payload:data.posts})
+      if(data.success){
+        dispatch({type:SET_POSTS, payload:data.posts})
+      }
+      else{
+        history.push('/login')
+      }
+      
 
      } catch (err) {
       console.error(err);
@@ -27,7 +33,7 @@ export const getallPosts = () => async (dispatch) => {
       dispatch({type:TOGGLE_POST_FETCHING_STATE})
 
       const {data} = await axios.post(
-        `http://localhost:4000/post`,postObj,{
+        `${process.env.REACT_APP_BASE_URL}/post`,postObj,{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
@@ -36,6 +42,10 @@ export const getallPosts = () => async (dispatch) => {
         dispatch({
           type:ADD_POST,
           payload:data.post
+        }) 
+        dispatch({
+          type:SET_BOOK_INFO,
+          payload:null
         })
       }
       else{
@@ -56,7 +66,7 @@ export const getallPosts = () => async (dispatch) => {
 
     try {
       console.log(postId)
-      const {data} =await axios({ method: 'get', url:`http://localhost:4000/like/user`,data:postId, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
+      const {data} =await axios({ method: 'get', url:`${process.env.REACT_APP_BASE_URL}/like/user`,data:postId, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
       console.log(data)
       if (data.found){
         dispatch({type:SET_ISLIKED, payload:{postId,liked:true}})
@@ -78,7 +88,7 @@ export const getallPosts = () => async (dispatch) => {
 
     try {
       console.log(postId)
-      const {data} =await axios({ method: 'post', url:`http://localhost:4000/like`,data:postId, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
+      const {data} =await axios({ method: 'post', url:`${process.env.REACT_APP_BASE_URL}/like`,data:postId, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
       console.log(data)
      } catch (err) {
       console.error(err);
@@ -90,7 +100,7 @@ export const getallPosts = () => async (dispatch) => {
 
     try {
       console.log(postId)
-      const {data} =await axios({ method: 'delete', url:`http://localhost:4000/like`,data:postId, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
+      const {data} =await axios({ method: 'delete', url:`${process.env.REACT_APP_BASE_URL}/like`,data:postId, headers: { 'Authorization': 'Bearer ' + sessionStorage.getItem("auth_token") } })
       console.log(data)
      } catch (err) {
       console.error(err);

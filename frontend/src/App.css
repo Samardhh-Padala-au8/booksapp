@@ -2,17 +2,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Acme&family=Press+Start+2P&family=Satisfy&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
-
+html,body{
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 .App {
   /* display: flex;
   justify-content: center;
   align-items: center;text-align: center; */
+  display: flex;
+  align-content: center;
+  flex-direction: column;
   font-family: "Open Sans", sans-serif;
   background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
     url("./images/login.jpg");
-  width: 100%;
+  min-width: 100%;
   min-height: 100vh;
   height: auto;
+  width: auto;
   background-position: center;
   background-size: cover;
   position: absolute;

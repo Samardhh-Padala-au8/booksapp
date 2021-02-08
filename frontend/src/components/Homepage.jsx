@@ -1,8 +1,10 @@
 import React from "react";
 import Typewriter from "typewriter-effect";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
-const Homepage = () => {
-  return (
+const Homepage = ({ user }) => {
+  return !user ? (
     <div
       className="type_writer"
       style={{
@@ -33,7 +35,13 @@ const Homepage = () => {
         }}
       />
     </div>
+  ) : (
+    <Redirect to="/home" />
   );
 };
-
-export default Homepage;
+const mapStatetoprops = (storeData) => {
+  return {
+    user: storeData.userState.user,
+  };
+};
+export default connect(mapStatetoprops)(Homepage);

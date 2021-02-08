@@ -1,5 +1,7 @@
-import { SET_USER_RESPONSE, SET_DP_RESPONSE, SET_UPDATE_RESPONSE, TOGGLE_IS_DP_RES_FETCHING, TOGGLE_IS_UPDATE_RES_FETCHING, LOGOUT_USER, TOGGLE_IS_RES_FETCHING, SET_USER, TOGGLE_ISUSERFETCHING_STATE, SET_TOKEN, SET_USER_DETAIL, SET_SOCKET_ID, SET_ALL_USERS, SET_USER_PROFILE} from '../actionTypes'
+import { SET_USER_RESPONSE,SET_RESET_PASS_RES,SET_UPDATE_PASS_RES, SET_DP_RESPONSE, SET_UPDATE_RESPONSE, TOGGLE_IS_DP_RES_FETCHING, TOGGLE_IS_UPDATE_RES_FETCHING, LOGOUT_USER, TOGGLE_IS_RES_FETCHING, SET_USER, TOGGLE_ISUSERFETCHING_STATE, SET_TOKEN, SET_USER_DETAIL, SET_SOCKET_ID, SET_ALL_USERS, SET_USER_PROFILE} from '../actionTypes'
 import axios from 'axios'
+
+
 
 
 export const registerUser = (user, history) => async (dispatch) => {
@@ -8,7 +10,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       dispatch({type:TOGGLE_IS_RES_FETCHING})
       dispatch({type:SET_USER_RESPONSE, payload:null})
       const res = await axios.post(
-        `http://localhost:4000/user/register`, user
+        `${process.env.REACT_APP_BASE_URL}/user/register`, user
       );
       if (res.data.success){
         dispatch({
@@ -67,7 +69,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       dispatch({type:SET_USER, payload:null})
       console.log(user)
       const {data} = await axios.post(
-        `http://localhost:4000/user/login`, user
+        `${process.env.REACT_APP_BASE_URL}/user/login`, user
       );
       
       if(data.success){
@@ -107,7 +109,7 @@ export const registerUser = (user, history) => async (dispatch) => {
   };
 
 
-  export const getuserDetail = () => async (dispatch) => {
+  export const getuserDetail = (history) => async (dispatch) => {
 
     try {
   
@@ -115,7 +117,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       dispatch({type:SET_USER_RESPONSE, payload:null})
       dispatch({type:SET_USER_DETAIL, payload:null})
       const {data} = await axios(
-        `http://localhost:4000/user`, {
+        `${process.env.REACT_APP_BASE_URL}/user`, {
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
@@ -133,6 +135,8 @@ export const registerUser = (user, history) => async (dispatch) => {
           type:SET_USER_RESPONSE,
           payload:data
         })
+        history.push('/login')
+
       }
     } catch (err) {
       console.log(err);
@@ -150,7 +154,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       dispatch({type:TOGGLE_IS_DP_RES_FETCHING})
       dispatch({type:SET_DP_RESPONSE, payload:null})
       const {data} = await axios.post(
-        `http://localhost:4000/user/uploadfile`, imageData,{
+        `${process.env.REACT_APP_BASE_URL}/user/uploadfile`, imageData,{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
@@ -173,7 +177,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       dispatch({type:TOGGLE_IS_UPDATE_RES_FETCHING})
       dispatch({type:SET_UPDATE_RESPONSE, payload:null})
       const {data} = await axios.put(
-        `http://localhost:4000/user`, userdata,{
+        `${process.env.REACT_APP_BASE_URL}/user`, userdata,{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
@@ -193,7 +197,7 @@ export const registerUser = (user, history) => async (dispatch) => {
     try {
       dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
       const {data} = await axios.put(
-        `http://localhost:4000/user/deactivate`,{userId},{
+        `${process.env.REACT_APP_BASE_URL}/user/deactivate`,{userId},{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       )
@@ -220,7 +224,7 @@ export const registerUser = (user, history) => async (dispatch) => {
     try {
       dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
       const {data} = await axios.put(
-        `http://localhost:4000/user/activate`,{userId},{
+        `${process.env.REACT_APP_BASE_URL}/user/activate`,{userId},{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       )
@@ -241,15 +245,40 @@ export const registerUser = (user, history) => async (dispatch) => {
     }
   };
 
-  export const logoutUser = () => async (dispatch) => {
-    return dispatch({
-    type:LOGOUT_USER
-  })
+  export const logoutUser = (data1) => async (dispatch) => {
+    const {data} = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/user/logout`,data1, {
+          headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
+        }
+      );
+    if(data.success){
+      dispatch({
+        type:LOGOUT_USER
+      })
+    }
+    
+
+  };
+
+  export const logoutAll = (data1) => async (dispatch) => {
+    console.log('i am logout')
+    const {data} = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/user/logoutall`,data1,{
+          headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
+        }
+      );
+      console.log(data)
+    if(data.success){
+      dispatch({
+        type:LOGOUT_USER
+      })
+    }
+    
 
   };
 
 
-  export const getAllusers = () => async (dispatch) => {
+  export const getAllusers = (history) => async (dispatch) => {
 
     try {
       dispatch({
@@ -258,7 +287,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       })
       dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
       const {data} = await axios(
-        `http://localhost:4000/user/all`,{
+        `${process.env.REACT_APP_BASE_URL}/user/all`,{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
@@ -270,6 +299,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       }
       else{
         alert(data.error.message)
+        history.push('/login')
       }
      
     } catch (err) {
@@ -289,7 +319,7 @@ export const registerUser = (user, history) => async (dispatch) => {
       })
       dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
       const {data} = await axios(
-        `http://localhost:4000/user/${userId}`,{
+        `${process.env.REACT_APP_BASE_URL}/user/${userId}`,{
           headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
         }
       );
@@ -301,6 +331,58 @@ export const registerUser = (user, history) => async (dispatch) => {
       }
       else{
         alert(data.error.message)
+      }
+     
+    } catch (err) {
+      alert(err.message)
+    } 
+    finally{
+      dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
+    }
+  };
+
+
+  export const sendresetpasswordRequest = (email) => async (dispatch) => {
+
+    try {
+      dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
+      dispatch({type:SET_RESET_PASS_RES, payload:null})
+      const {data} = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/user/resetpassword`,{email}
+      );
+      if(data.success){
+        dispatch({type:SET_RESET_PASS_RES,payload:{message:data.message}})
+
+      }
+      else{
+        dispatch({type:SET_RESET_PASS_RES,payload:{message:data.error.message}})
+
+      }
+     
+    } catch (err) {
+      alert(err.message)
+    } 
+    finally{
+      dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
+    }
+  };
+
+  export const updatePassword = (object) => async (dispatch) => {
+
+    try {
+      console.log('fornt')
+      dispatch({type:TOGGLE_ISUSERFETCHING_STATE})
+      dispatch({type:SET_UPDATE_PASS_RES, payload:null})
+      const {data} = await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/user/updatepassword`,object
+      );
+      if(data.success){
+        dispatch({type:SET_UPDATE_PASS_RES,payload:{message:data.message}})
+
+      }
+      else{
+        dispatch({type:SET_UPDATE_PASS_RES,payload:{message:data.error.message}})
+
       }
      
     } catch (err) {
