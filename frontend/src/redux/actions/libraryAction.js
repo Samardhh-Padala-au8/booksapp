@@ -34,7 +34,7 @@ export const fetchlibrary = (history) => async (dispatch) => {
         dispatch({type:SET_LIBRARY_NULL})
         dispatch({type:TOGGLE_ISBOOK_ADDING})
 
-       const {data} = await axios(`${process.env.REACT_APP_BASE_URL}/library`,{
+       const {data} = await axios(`${process.env.REACT_APP_BASE_URL}/blibrary`,{
         headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
       })
       if(data.success){
@@ -69,7 +69,7 @@ export const getuserLibrary = (userId) => async (dispatch) => {
         dispatch({type:SET_LIBRARY_NULL})
         dispatch({type:TOGGLE_ISBOOK_ADDING})
 
-       const {data} = await axios(`${process.env.REACT_APP_BASE_URL}/library/${userId}`,{
+       const {data} = await axios(`${process.env.REACT_APP_BASE_URL}/blibrary/${userId}`,{
         headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
       })
       console.log(data)
@@ -96,6 +96,7 @@ export const getuserLibrary = (userId) => async (dispatch) => {
 }
 
 
+
 export const getlibrary = (query, booksarray) => async (dispatch) => {
     try {
         let index = booksarray.findIndex(x => x.title === query);
@@ -104,7 +105,7 @@ export const getlibrary = (query, booksarray) => async (dispatch) => {
             dispatch({type:TOGGLE_ISBOOK_ADDING})
             const { data } = await axios(`${booksarray[index]["link"]}`)
             const bookObj = { bookId: data.id, title:data.volumeInfo.title, image:data.volumeInfo.imageLinks.smallThumbnail}
-            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/library`,{bookId:data.id,title:data.volumeInfo.title,image:data.volumeInfo.imageLinks.smallThumbnail, collectionId:1},{
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/blibrary`,{bookId:data.id,title:data.volumeInfo.title,image:data.volumeInfo.imageLinks.smallThumbnail, collectionId:1},{
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
               })
             if (res.data.success){
@@ -135,7 +136,7 @@ export const getreadinglibrary = (query, booksarray) => async (dispatch) => {
             dispatch({type:TOGGLE_ISBOOK_ADDING})
             const { data } = await axios(`${booksarray[index]["link"]}`)
             const bookObj = { bookId: data.id, title:data.volumeInfo.title, image:data.volumeInfo.imageLinks.smallThumbnail}
-            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/library`,{bookId:data.id,title:data.volumeInfo.title,image:data.volumeInfo.imageLinks.smallThumbnail, collectionId:2},{
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/blibrary`,{bookId:data.id,title:data.volumeInfo.title,image:data.volumeInfo.imageLinks.smallThumbnail, collectionId:2},{
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
               })
             if(res.data.success){
@@ -168,7 +169,7 @@ export const getwillreadinglibrary = (query, booksarray) => async (dispatch) => 
             dispatch({type: TOGGLE_ISBOOK_ADDING})
             const { data } = await axios(`${booksarray[index]["link"]}`)
             const bookObj = { bookId: data.id, title:data.volumeInfo.title, image:data.volumeInfo.imageLinks.smallThumbnail}
-            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/library`,{bookId:data.id,title:data.volumeInfo.title,image:data.volumeInfo.imageLinks.smallThumbnail, collectionId:3},{
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/blibrary`,{bookId:data.id,title:data.volumeInfo.title,image:data.volumeInfo.imageLinks.smallThumbnail, collectionId:3},{
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
               })
             if(res.data.success){
@@ -193,7 +194,7 @@ export const getwillreadinglibrary = (query, booksarray) => async (dispatch) => 
 export const deleteread=(id)=>async (dispatch)=>{
     try{
         dispatch({type:TOGGLE_ISBOOK_ADDING})
-        const {data} =await axios.delete(`${process.env.REACT_APP_BASE_URL}/library/${id}`,{
+        const {data} =await axios.delete(`${process.env.REACT_APP_BASE_URL}/blibrary/${id}`,{
             headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
           })
           if(data.success){
@@ -217,7 +218,7 @@ export const deleteread=(id)=>async (dispatch)=>{
 export const deletereading=(id)=>async (dispatch)=>{
     try{
         dispatch({type:TOGGLE_ISBOOK_ADDING})
-        const {data} =await axios.delete(`${process.env.REACT_APP_BASE_URL}/library/${id}`,{
+        const {data} =await axios.delete(`${process.env.REACT_APP_BASE_URL}/blibrary/${id}`,{
             headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
           })
           if(data.success){
@@ -240,7 +241,7 @@ export const deletereading=(id)=>async (dispatch)=>{
 export const deletewillread=(id)=>async (dispatch)=>{
     try{
         dispatch({type:TOGGLE_ISBOOK_ADDING})
-        const {data} =await axios.delete(`${process.env.REACT_APP_BASE_URL}/library/${id}`,{
+        const {data} =await axios.delete(`${process.env.REACT_APP_BASE_URL}/blibrary/${id}`,{
             headers: { Authorization: `Bearer ${sessionStorage.getItem("auth_token")}` },
           })
           if(data.success){

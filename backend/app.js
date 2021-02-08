@@ -39,7 +39,7 @@ app.get('/', (req, res)=>{
 
 
 app.use('/user', userRouter)
-app.use('/library', libraryRouter)
+app.use('/blibrary', libraryRouter)
 app.use('/post',postRouter)
 app.use('/like', likeRouter )
 app.use('/comment', commentRouter)
